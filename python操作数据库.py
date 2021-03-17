@@ -28,16 +28,42 @@ cursor = connection.cursor()
 # for table in cursor:
 #     print(table)
 
-# 插入数据
-sql = 'insert into student_text(id,student_id,name,age,in_date,out_date,major) values (%(id)s,%(student_id)s,%(name)s,%(age)s,%(in_date)s,%(out_date)s,%(major)s)'
-sql_values = {
-    'id': 3001,
+sql_values = {  # 以字典的形式填入数据
+    'id': 3003,
     'student_id': 2018331101,
-    'name': '憨憨梨',
+    'name': '\'测试\'',  # 因为在数据库语句中字符串需要添加单引号或者双引号
     'age': 18,
-    'in_date': '2018-9-1',
-    'out_date': '2021-6-30',
-    'major': '信息工程系'
-}  # 以字典的形式填入数据
-cursor.execute(sql, sql_values)
-cursor.connection.commit()  # 请记得添加这句提交代码
+    'in_date': '\'2018-9-1\'',
+    'out_date': '\'2021-6-30\'',
+    'major': '\'信息工程系\''
+}
+
+# 查询数据
+select_sql = 'select * from student_text;'
+cursor.execute(select_sql)  # 返回值为受影响的行数，如下：
+'''
+num=cursorl.execute(sql)
+print(num)结果为num=8
+'''
+# r_all = cursor.fetchall()  # 取出全部查询结果
+# r_one = cursor.fetchone()  # 取出一行查询结果。从第一行开始取
+r_many = cursor.fetchmany(size=2)  # 取出其中几行查询结果
+# 如fetchall(),fetchmany(),fetchone()同时作用于同一个查询时，每个方法执行开头是上一个方法执行的结尾,例如第一句fetchall没有注释掉 后面俩句获取到的都是none
+print(r_many)
+
+# 插入数据（） insert_sql = 'insert into student_text(id,student_id,name,age,in_date,out_date,major) values ({id},
+# {student_id},{name},' \ '{age},{in_date},{out_date},{major}) '.format( **sql_values)  # on duplicate key update
+# student_id={student_id},name={name},age={age},in_date={in_date}, # out_date={out_date},major={major} try: # 执行sql语句
+# cursor.execute(insert_sql) # 请记得添加这句提交代码 提交到数据库执行 except pymysql.err.IntegrityError: print('提交失败,数据库已有该数据')
+# connection.rollback() else: connection.commit() print('提交成功')
+
+# 删除数据
+'''
+上面的实例中，使用的均是普通游标，返回结果为元组：查看起来不太方便，我们可以通过游标类型来控制数据返回类型
+定义游标类型：在connect()中通过 “cursorclass=pymysql.cursors.DictCursor” 来定义
+
+不缓存游标的用法：
+用途：用于返回大量数据，查询，或慢速网络连接到远程服务器不将每行数据复制到缓冲区,根据需要获取行。客户端内存使用少在慢速网络上或结果集非常大时行返回速度快
+限制:MySQL协议不支持返回总行数,判断有多少行唯一方法是选代返回的每一行。
+目前无法向后滚动,因为只有当前行保存在内存中。
+'''
