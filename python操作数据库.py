@@ -39,25 +39,26 @@ sql_values = {  # 以字典的形式填入数据
 }
 
 # 查询数据
-select_sql = 'select * from student_text;'
+select_sql = 'select student_id,name,age,major from student_text where name=' + '\'海妍\'' + ';'  # 根据学生姓名查询数据
 cursor.execute(select_sql)  # 返回值为受影响的行数，如下：
-'''
-num=cursorl.execute(sql)
-print(num)结果为num=8
-'''
-# r_all = cursor.fetchall()  # 取出全部查询结果
-# r_one = cursor.fetchone()  # 取出一行查询结果。从第一行开始取
-r_many = cursor.fetchmany(size=2)  # 取出其中几行查询结果
-# 如fetchall(),fetchmany(),fetchone()同时作用于同一个查询时，每个方法执行开头是上一个方法执行的结尾,例如第一句fetchall没有注释掉 后面俩句获取到的都是none
-print(r_many)
+## num=cursorl.execute(sql)
+## print(num)结果为num=8
 
-# 插入数据（） insert_sql = 'insert into student_text(id,student_id,name,age,in_date,out_date,major) values ({id},
+r_all = cursor.fetchall()  # 取出全部查询结果
+# r_one = cursor.fetchone()  # 取出一行查询结果。从第一行开始取
+# r_many = cursor.fetchmany(size=2)  # 取出其中几行查询结果
+# 如fetchall(),fetchmany(),fetchone()同时作用于同一个查询时，每个方法执行开头是上一个方法执行的结尾,例如第一句fetchall没有注释掉 后面俩句获取到的都是none
+print(r_all)
+
+## 插入数据（）
+# insert_sql = 'insert into student_text(id,student_id,name,age,in_date,out_date,major) values ({id},
 # {student_id},{name},' \ '{age},{in_date},{out_date},{major}) '.format( **sql_values)  # on duplicate key update
 # student_id={student_id},name={name},age={age},in_date={in_date}, # out_date={out_date},major={major} try: # 执行sql语句
 # cursor.execute(insert_sql) # 请记得添加这句提交代码 提交到数据库执行 except pymysql.err.IntegrityError: print('提交失败,数据库已有该数据')
 # connection.rollback() else: connection.commit() print('提交成功')
 
 # 删除数据
+delete_sql = ''
 '''
 上面的实例中，使用的均是普通游标，返回结果为元组：查看起来不太方便，我们可以通过游标类型来控制数据返回类型
 定义游标类型：在connect()中通过 “cursorclass=pymysql.cursors.DictCursor” 来定义
