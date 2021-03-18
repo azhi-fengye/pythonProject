@@ -39,16 +39,16 @@ sql_values = {  # 以字典的形式填入数据
 }
 
 # 查询数据
-select_sql = 'select student_id,name,age,major from student_text where name=' + '\'海妍\'' + ';'  # 根据学生姓名查询数据
-cursor.execute(select_sql)  # 返回值为受影响的行数，如下：
+# select_sql = 'select student_id,name,age,major from student_text where name=\'海妍\';'  # 根据学生姓名查询数据
+# cursor.execute(select_sql)  # 返回值为受影响的行数，如下：
 ## num=cursorl.execute(sql)
 ## print(num)结果为num=8
 
-r_all = cursor.fetchall()  # 取出全部查询结果
+# r_all = cursor.fetchall()  # 取出全部查询结果
 # r_one = cursor.fetchone()  # 取出一行查询结果。从第一行开始取
 # r_many = cursor.fetchmany(size=2)  # 取出其中几行查询结果
 # 如fetchall(),fetchmany(),fetchone()同时作用于同一个查询时，每个方法执行开头是上一个方法执行的结尾,例如第一句fetchall没有注释掉 后面俩句获取到的都是none
-print(r_all)
+# print(r_all)  # 输出的数据类型为元组
 
 ## 插入数据（）
 # insert_sql = 'insert into student_text(id,student_id,name,age,in_date,out_date,major) values ({id},
