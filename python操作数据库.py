@@ -13,9 +13,17 @@ connection = pymysql.connect(
 # 使用cursor()方法创建一个游标对象cursor
 cursor = connection.cursor()
 
+sql_values = {  # 以字典的形式填入数据
+    'id': 3003,
+    'student_id': 2018331101,
+    'name': '\'测试\'',  # 因为在数据库语句中字符串需要添加单引号或者双引号
+    'age': 18,
+    'in_date': '\'2018-9-1\'',
+    'out_date': '\'2021-6-30\'',
+    'major': '\'信息工程系\''
+}
 # 创建数据库
-# cursor.execute('create database mydatabese')
-
+cursor.execute('create database mydatabese1')
 # 创建表
 # cursor.execute("CREATE TABLE customers (name varchar(255),address varchar(255))")
 
@@ -28,15 +36,6 @@ cursor = connection.cursor()
 # for table in cursor:
 #     print(table)
 
-sql_values = {  # 以字典的形式填入数据
-    'id': 3003,
-    'student_id': 2018331101,
-    'name': '\'测试\'',  # 因为在数据库语句中字符串需要添加单引号或者双引号
-    'age': 18,
-    'in_date': '\'2018-9-1\'',
-    'out_date': '\'2021-6-30\'',
-    'major': '\'信息工程系\''
-}
 
 # 查询数据
 # select_sql = 'select student_id,name,age,major from student_text where name=\'海妍\';'  # 根据学生姓名查询数据
@@ -47,18 +46,33 @@ sql_values = {  # 以字典的形式填入数据
 # r_all = cursor.fetchall()  # 取出全部查询结果
 # r_one = cursor.fetchone()  # 取出一行查询结果。从第一行开始取
 # r_many = cursor.fetchmany(size=2)  # 取出其中几行查询结果
-# 如fetchall(),fetchmany(),fetchone()同时作用于同一个查询时，每个方法执行开头是上一个方法执行的结尾,例如第一句fetchall没有注释掉 后面俩句获取到的都是none
+## 如fetchall(),fetchmany(),fetchone()同时作用于同一个查询时，每个方法执行开头是上一个方法执行的结尾,例如第一句fetchall没有注释掉 后面俩句获取到的都是none
 # print(r_all)  # 输出的数据类型为元组
 
 ## 插入数据（）
-# insert_sql = 'insert into student_text(id,student_id,name,age,in_date,out_date,major) values ({id},
-# {student_id},{name},' \ '{age},{in_date},{out_date},{major}) '.format( **sql_values)  # on duplicate key update
-# student_id={student_id},name={name},age={age},in_date={in_date}, # out_date={out_date},major={major} try: # 执行sql语句
-# cursor.execute(insert_sql) # 请记得添加这句提交代码 提交到数据库执行 except pymysql.err.IntegrityError: print('提交失败,数据库已有该数据')
-# connection.rollback() else: connection.commit() print('提交成功')
+# insert_sql = 'insert into student_text(id,student_id,name,age,in_date,out_date,major) values ({id},{student_id}, {name}, {age}, {in_date}, {out_date}, {major}) '.format(
+#     **sql_values)
+# # on duplicate key updatestudent_id = {student_id}, name = {name}, age = {age}, in_date = {in_date},out_date={out_date},major={major}
+# try:
+#     cursor.execute(insert_sql)
+# except:
+#     print('提交失败,数据库已有该数据')
+#     connection.rollback()
+# else:
+#     connection.commit()
+#     print('提交成功')
 
-# 删除数据
-delete_sql = ''
+# # 删除数据
+# delete_sql = 'DELETE FROM student_text where student_id=2018331097;'
+# # 如果没有指定 WHERE 子句，MySQL 表中的所有记录将被删除。
+# cursor.execute(delete_sql)
+# connection.commit()
+
+# # 更新数据
+# update_sql = 'UPDATE student_text set name=\'梨梨\',age=20 where id=2996'
+# # 不使用 WHERE 子句将数据表的全部数据进行更新，所以要慎重。
+# cursor.execute(update_sql)
+# connection.commit()
 '''
 上面的实例中，使用的均是普通游标，返回结果为元组：查看起来不太方便，我们可以通过游标类型来控制数据返回类型
 定义游标类型：在connect()中通过 “cursorclass=pymysql.cursors.DictCursor” 来定义
