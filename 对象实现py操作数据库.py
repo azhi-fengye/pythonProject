@@ -28,21 +28,18 @@ class Mysql_Operation:
             print('创建数据库成功：{}'.format(database_name))
 
     def create_datatable(self, table_name, *args):
-        print(args)
-        str_args = list(args)
-        print(str_args)
-        str_args = str(str_args)
-        print(str_args)
-        # str_args.pop(-2)
-        # str_args=''.join(str_args)
-        # print(str_args)
-        # create_table = 'create table' + table_name+' '+ str_args
-        # print(create_table)
-        # self.cursor.execute(create_table)
+        args = str(args)
+        args = list(args)
+        args.pop(-2)
+        str_args = ''.join(args)
+        str_args = str_args.replace('\'', '').lstrip('(').rstrip(')')
+        create_table = 'create table ' + table_name + ' ' + '(id int unsigned not null  auto_increment PRIMARY KEY,' + str_args + ');'
+        print(create_table)
+        self.cursor.execute(create_table)
 
 
 # 创建一个操作数据库的实例
 Mysql_new = Mysql_Operation()
 
 # Mysql_new.create_database(input('创建数据库:'))
-Mysql_new.create_datatable('haolaji', 'name varchar(25),age int(5),ce int(5)')
+Mysql_new.create_datatable('haolaji1', 'name varchar(25),age int,ce int')
