@@ -32,10 +32,9 @@ cursor.execute('create database mydatabese1')
 # 修改costomers表 添加id字段 类型为int 主键 自增
 
 # 查询并打印数据库中的所有表
-# cursor.execute('show tables')
-# for table in cursor:
-#     print(table)
-
+cursor.execute('show tables')
+for table in cursor:
+    print(table)
 
 # 查询数据
 # select_sql = 'select student_id,name,age,major from student_text where name=\'海妍\';'  # 根据学生姓名查询数据
