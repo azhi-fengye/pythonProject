@@ -23,7 +23,7 @@ sql_values = {  # 以字典的形式填入数据
     'major': '\'信息工程系\''
 }
 # 创建数据库
-cursor.execute('create database mydatabese1')
+# cursor.execute('create database mydatabese1')
 # 创建表
 # cursor.execute("CREATE TABLE customers (name varchar(255),address varchar(255))")
 
@@ -35,7 +35,8 @@ cursor.execute('create database mydatabese1')
 cursor.execute('show tables')
 for table in cursor:
     print(table)
-
+print(cursor.execute('select database()'))
+print(cursor.fetchone())
 # 查询数据
 # select_sql = 'select student_id,name,age,major from student_text where name=\'海妍\';'  # 根据学生姓名查询数据
 # cursor.execute(select_sql)  # 返回值为受影响的行数，如下：

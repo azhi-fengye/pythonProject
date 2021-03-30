@@ -17,6 +17,13 @@ class Mysql_Operation:
         else:
             print('连接数据库后台成功')
 
+    def show_DataBases(self):
+        str_ShowDataBases = 'show databases'
+        self.cursor.execute(str_ShowDataBases)
+        print('您拥有的数据库为')
+        for databases_name in self.cursor:
+            print(databases_name)
+
     def create_DataBases(self, database_name):
         create_base = 'create database ' + database_name
         try:
@@ -36,7 +43,7 @@ class Mysql_Operation:
             self.use_DataBases(databases_name)
         else:
             print('连接数据库{}成功'.format(databases_name))
-
+            return databases_name
             # 连接数据库成功后输出库里面的表名
             # self.show_BasesTable(databases_name)
 
@@ -44,6 +51,7 @@ class Mysql_Operation:
         str_DelDataBases = 'drop database ' + del_name
         try:
             self.cursor.execute(str_DelDataBases)
+            print('{}被删除'.format(del_name))
         except pymysql.err.Error as e:
             print(repr(e))
             del_name = input('您输入的数据库名有误或没有找到该数据库，请重新输入：')
@@ -72,7 +80,7 @@ class Mysql_Operation:
         pass
 
     def show_BasesTable(self, databases='taoxu'):
-        str_ShowDataBases = 'show tables'
+        str_ShowDataBases = 'show tables ' + databases
         self.cursor.execute(str_ShowDataBases)
         print('数据库{}的表为：'.format(databases))
         for BasesTable_name in self.cursor.fetchall():
@@ -91,10 +99,37 @@ if __name__ == '__main__':
     # 创建一个操作数据库的实例
     Mysql_new = Mysql_Operation()
     while True:
-        button = int(input('请根据选项输入您所需要的功能\n'
-                           '（1）创建数据库\n'
-                           '（2）选择控制的数据库\n'
-                           '（3）删除数据库'
-                           '（4）退出数据库控制系统'))
-        if button == 1:
-            Mysql_new.create_DataBases()
+        try:
+            button = int(input('请根据选项输入您所需要的功能\n'
+                               '（1）查看数据库\n'
+                               '（2）创建数据库\n'
+                               '（3）选择控制的数据库\n'
+                               '（4）删除数据库\n'
+                               '（q）退出数据库控制系统'))
+        except ValueError:
+            print('您的输入有误，请根据已有功能选项重新输入')
+            button = int(input('请根据选项输入您所需要的功能\n'
+                               '（1）查看数据库\n'
+                               '（2）创建数据库\n'
+                               '（3）选择控制的数据库\n'
+                               '（4）删除数据库\n'
+                               '（5）查看表\n'
+                               '（6）退出数据库管理系统\n'))
+        else:
+            if button == 1:
+                Mysql_new.show_DataBases()
+            elif button == 2:
+                create_databasesname = input('请输入您需要创建的数据库名称（输入quit返回上一级）：')
+                if create_databasesname == 'quit':
+                    continue
+                else:
+                    Mysql_new.create_DataBases(create_databasesname)
+            elif button == 3:
+                Mysql_new.use_DataBases(input('请输入您想要控制的数据库名称'))
+            elif button == 4:
+                Mysql_new.del_DataBases(input('请输入您想要删除的数据库名称'))
+            elif button == 5:
+                Mysql_new.show_BasesTable()
+            elif button == 6:
+                print('退出数据库管理系统')
+                break
