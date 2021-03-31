@@ -2,7 +2,9 @@ import pymysql
 
 
 class Mysql_Operation:
+
     def __init__(self):
+        self.useBases = 'None'
         try:
             self.conn = pymysql.connect(
                 host='localhost',  # IP，MySQL数据库服务器IP地址
@@ -43,9 +45,9 @@ class Mysql_Operation:
             self.use_DataBases(databases_name)
         else:
             print('连接数据库{}成功'.format(databases_name))
-            return databases_name
             # 连接数据库成功后输出库里面的表名
-            # self.show_BasesTable(databases_name)
+            self.show_BasesTable(databases_name)
+            self.useBases = databases_name
 
     def del_DataBases(self, del_name):
         str_DelDataBases = 'drop database ' + del_name
@@ -57,11 +59,23 @@ class Mysql_Operation:
             del_name = input('您输入的数据库名有误或没有找到该数据库，请重新输入：')
             self.del_DataBases(del_name)
 
+    def change_Table(self, change_type, change_range):
+        pass
+
+    def show_BasesTable(self, databases='taoxu'):
+
+        str_ShowDataBases = 'select table_name from INFORMATION_SCHEMA.TABLES where TABLE_SCHEMA = \'' + databases + '\';'
+        print(str_ShowDataBases)
+        self.cursor.execute(str_ShowDataBases)
+        print('数据库{}的表为：'.format(databases))
+        for BasesTable_name in self.cursor.fetchall():
+            print(str(BasesTable_name).rstrip(')').lstrip('(').rstrip(','))
+
     def create_DataTable(self, table_name, *args):
-        args = str(args)
-        args = list(args)
-        args.pop(-2)
-        str_args = ''.join(args)
+        str_args = str(args)
+        list_args = list(str_args)
+        list_args.pop(-2)
+        str_args = ''.join(list_args)
         str_args = str_args.replace('\'', '').lstrip('(').rstrip(')')
         create_table = 'create table ' + table_name + ' ' + '(id int unsigned not null  auto_increment PRIMARY KEY,' + str_args + '));'
         try:
@@ -76,28 +90,11 @@ class Mysql_Operation:
         else:
             print('创建数据表成功')
 
-    def change_Table(self, change_type, change_range):
-        pass
-
-    def show_BasesTable(self, databases='taoxu'):
-        str_ShowDataBases = 'show tables ' + databases
-        self.cursor.execute(str_ShowDataBases)
-        print('数据库{}的表为：'.format(databases))
-        for BasesTable_name in self.cursor.fetchall():
-            print(str(BasesTable_name).rstrip(')').lstrip('(').rstrip(','))
-    # 创建数据库
-    # Mysql_new.create_database(input('创建数据库:'))
-
-    # 创建数据库表
-    # Mysql_new.create_Datatable(input('请输入您想要创建的数据表名'), input(
-    #     '输入您想要创建的数据表的字段名和字段类型（请以name varchar(25),age int这样为模板）'))  # 'name varchar(25),age int,ce int'
-
-    #
-
 
 if __name__ == '__main__':
     # 创建一个操作数据库的实例
     Mysql_new = Mysql_Operation()
+
     while True:
         try:
             button = int(input('请根据选项输入您所需要的功能\n'
@@ -105,7 +102,8 @@ if __name__ == '__main__':
                                '（2）创建数据库\n'
                                '（3）选择控制的数据库\n'
                                '（4）删除数据库\n'
-                               '（q）退出数据库控制系统'))
+                               '（5）查看数据表\n'
+                               '（6）退出数据库控制系统\n'))
         except ValueError:
             print('您的输入有误，请根据已有功能选项重新输入')
             button = int(input('请根据选项输入您所需要的功能\n'
@@ -113,7 +111,7 @@ if __name__ == '__main__':
                                '（2）创建数据库\n'
                                '（3）选择控制的数据库\n'
                                '（4）删除数据库\n'
-                               '（5）查看表\n'
+                               '（5）查看数据表\n'
                                '（6）退出数据库管理系统\n'))
         else:
             if button == 1:
@@ -125,11 +123,32 @@ if __name__ == '__main__':
                 else:
                     Mysql_new.create_DataBases(create_databasesname)
             elif button == 3:
-                Mysql_new.use_DataBases(input('请输入您想要控制的数据库名称'))
+                use_databasesname = input('请输入您想要控制的数据库名称（输入quit返回上一级）：')
+                if use_databasesname == 'quit':
+                    continue
+                else:
+                    Mysql_new.use_DataBases(use_databasesname)
             elif button == 4:
-                Mysql_new.del_DataBases(input('请输入您想要删除的数据库名称'))
+                del_databasesname = input('请输入您想要删除的数据库名称（输入quit返回上一级）：')
+                if del_databasesname == 'quit':
+                    continue
+                else:
+                    Mysql_new.del_DataBases(del_databasesname)
             elif button == 5:
+                show_basestablename = input('请输入您想要查询所有表的数据库（输入quit返回上一级）')
                 Mysql_new.show_BasesTable()
             elif button == 6:
                 print('退出数据库管理系统')
                 break
+            # 创建数据库
+            # Mysql_new.create_database(input('创建数据库:'))
+
+            # 创建数据库表
+            # Mysql_new.create_Datatable(input('请输入您想要创建的数据表名'), input(
+            #     '输入您想要创建的数据表的字段名和字段类型（请以name varchar(25),age int这样为模板）'))  # 'name varchar(25),age int,ce int'
+            # 查询当前是否选择了控制数据库
+            # self.cursor.execute('select database()')
+            # print(str(self.cursor.fetchone()).rstrip(',)').lstrip('('))
+            # if str(self.cursor.fetchone()).rstrip(',)').lstrip('(') == 'None':
+            #     print('您好，请先选择操作的数据库再查询数据库里的表哦')
+            #     self.use_DataBases(input('请输入您想要控制的数据库名：'))

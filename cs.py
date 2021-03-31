@@ -1,7 +1,9 @@
-# cs = ('nihk', 'uiwo', 'ceshi',)
-# print(str(cs).replace('\'', ''))
-#
-# print(list(cs))
-import 对象实现py操作数据库
-
-对象实现py操作数据库
+a = 12345678909876543
+a = str(a)
+print(len(a))
+for i in a:
+    print(i)
+print(a[::-1])
+b = list()
+b.append(a)
+print(b)
