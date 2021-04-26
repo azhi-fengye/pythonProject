@@ -12,7 +12,7 @@ use_unicode = None,  # 是否使用 unicode 编码
 client_flag = 0,  # Custom flags to send to MySQL. Find potential values in constants.CLIENT.
 cursorclass = <
 
-class 'pymysql.cursors.Cursor'>,  # 选择 Cursor 类型
+class <'pymysql.cursors.Cursor' >,  # 选择 Cursor 类型
 
 
 init_command = None,  # 连接建立时运行的初始语句
