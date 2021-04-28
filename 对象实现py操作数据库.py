@@ -80,7 +80,7 @@ class Mysql_Operation:
             print('查看数据表失败')
             print(repr(e))
         else:
-            print('{:<20}{:<19}{:<19}{:<20}{:<19}{:<16}'.format('字段', '类型', '可否为空', '主键', '默认值', '额外的信息说明'))
+            print('{:<20}{:<19}{:<19}{:<20}{:<19}{:<16}'.format('字段', '类型', '可否为空', '主键', '默认值', '额外的信息'))
             for field_all in self.cursor.fetchall():
                 for field_one in field_all:
                     print('{:<21}'.format(str(field_one)), end='')
@@ -233,8 +233,9 @@ if __name__ == '__main__':
                     Mysql_new.change_Table('del', del_tablename, del_range)
                 elif create_button == 4:
                     change_tablename = input('请输入您想要修改的表的名字')
-                    change_range = input('请输入您想要修改的字段名以及修改后的名字')
-                    Mysql_new.change_Table('change')
+                    change_oldfieldname = input('请输入您想要修改的字段名')
+                    change_newfieldname = input('请输入修改后的字段名')
+                    Mysql_new.change_Table('change', )
                 elif create_button == 6:
                     continue
             elif button == 200:
